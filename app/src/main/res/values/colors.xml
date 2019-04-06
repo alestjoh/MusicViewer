@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#22AADD</color>
+    <color name="colorPrimaryDark">#0077AA</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="rockColor">#FF7777</color>
+    <color name="classicColor">#77FF77</color>
+    <color name="popColor">#7777FF</color>
+</resources>
