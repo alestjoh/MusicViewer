@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Entity
+@Entity(tableName = "song_table")
 public class SongItem {
 
     @PrimaryKey
