@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "song_table")
 public class SongItem {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int uid;
 
     @ColumnInfo(name = "artist")
