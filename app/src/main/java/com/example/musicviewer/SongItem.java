@@ -1,24 +1,44 @@
 package com.example.musicviewer;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class SongItem {
+
+    @PrimaryKey
+    public int uid;
+
+    @ColumnInfo(name = "artist")
     @SerializedName("artistName")
     @Expose
     private String artistName;
+
+    @ColumnInfo(name = "collection")
     @SerializedName("collectionName")
     @Expose
     private String collectionName;
+
+    @ColumnInfo(name = "track_name")
     @SerializedName("trackName")
     @Expose
     private String trackName;
+
+    @ColumnInfo(name = "artwork")
     @SerializedName("artworkUrl60")
     @Expose
     private String artworkUrl60;
+
+    @ColumnInfo(name = "price")
     @SerializedName("trackPrice")
     @Expose
     private Double trackPrice;
+
+    @ColumnInfo(name = "preview")
     @SerializedName("previewUrl")
     @Expose
     private String previewUrl;
