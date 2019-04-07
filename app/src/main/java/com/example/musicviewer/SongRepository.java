@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import java.util.List;
 
 public class SongRepository {
+    public static final int INSERT = 1, DELETE_ALL = 2;
     private SongItemDao songItemDao;
     private LiveData<List<SongItem>> allSongs;
 
@@ -21,20 +22,29 @@ public class SongRepository {
     }
 
     public void insert(SongItem songItem) {
-        new InsertAsync(songItemDao).execute(songItem);
+        new QueryAsync(songItemDao, INSERT).execute(songItem);
     }
 
-    private static class InsertAsync extends AsyncTask<SongItem, Void, Void> {
+    public void deleteAll() {
+        new QueryAsync(songItemDao, DELETE_ALL).execute();
+    }
 
+    private static class QueryAsync extends AsyncTask<SongItem, Void, Void> {
         SongItemDao dao;
+        int actionCode;
 
-        InsertAsync(SongItemDao dao) {
+        QueryAsync(SongItemDao dao, int actionCode) {
             this.dao = dao;
+            this.actionCode = actionCode;
         }
 
         @Override
         protected Void doInBackground(final SongItem... songItems) {
-            dao.insert(songItems[0]);
+            if (actionCode == INSERT) {
+                dao.insert(songItems[0]);
+            } else if (actionCode == DELETE_ALL) {
+                dao.deleteAll();
+            }
             return null;
         }
     }
