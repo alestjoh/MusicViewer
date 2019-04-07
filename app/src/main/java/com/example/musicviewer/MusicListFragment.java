@@ -1,5 +1,6 @@
 package com.example.musicviewer;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -8,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import retrofit2.Call;
@@ -100,9 +100,12 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
      */
     @Override
     public void onResponse(Call<MusicList> call, Response<MusicList> response) {
-        SongAdapter songAdapter = new SongAdapter(
+        Toast.makeText(getActivity().getBaseContext(),
+                "On Success was called: " + response.body(),
+                Toast.LENGTH_LONG).show();
+        /*SongAdapter songAdapter = new SongAdapter(
                 response.body(), this.getActivity().getBaseContext());
-        recyclerView.setAdapter(songAdapter);
+        recyclerView.setAdapter(songAdapter);*/
     }
 
     /**
@@ -114,9 +117,24 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
      */
     @Override
     public void onFailure(Call<MusicList> call, Throwable t) {
-        Toast.makeText(
-                this.getActivity().getBaseContext(),
-                "Error accessing music database. :(",
-                Toast.LENGTH_SHORT).show();
+        if (apiTarget.equals(getResources().getString(R.string.classic))) {
+            Toast.makeText(
+                    this.getActivity().getBaseContext(),
+                    "Error accessing music database. Loading local storage...",
+                    Toast.LENGTH_LONG).show();
+
+            /*SongViewModel songViewModel = MainActivity.songViewModel;
+            MusicList musicList = new MusicList();
+            musicList.setResults(songViewModel.getAllSongs().getValue());
+            musicList.setResultCount(musicList.getResults().size());
+            SongAdapter songAdapter = new SongAdapter(
+                    musicList, this.getActivity().getBaseContext());
+            recyclerView.setAdapter(songAdapter);*/
+        } else {
+            Toast.makeText(
+                    this.getActivity().getBaseContext(),
+                    "Error accessing music database. :(",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

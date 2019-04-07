@@ -2,6 +2,7 @@ package com.example.musicviewer;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout placeholder;
     private String currentFragment = null;
     private static final String CURRENT_FRAGMENT = "com.example.musicviewer.current_fragment";
+
+    public static SongViewModel songViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }
         });
+
+        songViewModel = ViewModelProviders.of(this).get(SongViewModel.class);
     }
 
     private void updateFragment(String str) {
