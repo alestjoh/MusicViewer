@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
     private static ApiInterface api;
 
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeView;
 
     public MusicListFragment() {
         // Required empty public constructor
@@ -63,26 +65,36 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
 
         recyclerView = viewGroup.findViewById(R.id.recycler_view_fragment);
         recyclerView.setLayoutManager(new LinearLayoutManager(viewGroup.getContext()));
+        swipeView = viewGroup.findViewById(R.id.swipe_refresh_layout_fragment);
+        swipeView.setOnRefreshListener(() -> {
+            recyclerView.setAdapter(null);
+            loadDataFromWeb();
+
+        });
 
         if (api == null) {
             initializeRetrofit();
         }
 
+        loadDataFromWeb();
+
+        return viewGroup;
+    }
+
+    private void loadDataFromWeb() {
         if (apiTarget.equals(getResources().getString(R.string.rock))) {
             recyclerView.setBackgroundColor(
-                    ContextCompat.getColor(container.getContext(), R.color.rockColor));
+                    ContextCompat.getColor(getActivity(), R.color.rockColor));
             api.getRockMusic().enqueue(this);
         } else if (apiTarget.equals(getResources().getString(R.string.classic))) {
             recyclerView.setBackgroundColor(
-                    ContextCompat.getColor(container.getContext(), R.color.classicColor));
+                    ContextCompat.getColor(getActivity(), R.color.classicColor));
             api.getClassicMusic().enqueue(this);
         } else {
             recyclerView.setBackgroundColor(
-                    ContextCompat.getColor(container.getContext(), R.color.popColor));
+                    ContextCompat.getColor(getActivity(), R.color.popColor));
             api.getPopMusic().enqueue(this);
         }
-
-        return viewGroup;
     }
 
     private void initializeRetrofit() {
@@ -107,6 +119,7 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
         SongAdapter songAdapter = new SongAdapter(
                 response.body(), this.getActivity().getBaseContext());
         recyclerView.setAdapter(songAdapter);
+        swipeView.setRefreshing(false);
         if (apiTarget.equals(getResources().getString(R.string.classic))) {
 
             SongViewModel songViewModel = ((MainActivity)getActivity()).getSongViewModel();
@@ -146,6 +159,7 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
                             SongAdapter songAdapter = new SongAdapter(
                                     musicList, MusicListFragment.this.getActivity());
                             recyclerView.setAdapter(songAdapter);
+                            swipeView.setRefreshing(false);
                         }
                     });
         } else {
