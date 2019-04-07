@@ -3,6 +3,10 @@
     <string name="rock">Rock</string>
     <string name="classic">Classic</string>
     <string name="pop">Pop</string>
+    
+    <string name="song_collection">Collection Name</string>
+    <string name="song_artist">Artist Name</string>
+    <string name="song_price">Price</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

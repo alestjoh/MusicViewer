@@ -3,10 +3,12 @@ package com.example.musicviewer;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import retrofit2.Call;
@@ -56,6 +58,7 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
                 R.layout.fragment_music_list, container, false);
 
         recyclerView = viewGroup.findViewById(R.id.recycler_view_fragment);
+        recyclerView.setLayoutManager(new LinearLayoutManager(viewGroup.getContext()));
 
         if (api == null) {
             initializeRetrofit();
@@ -97,7 +100,9 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
      */
     @Override
     public void onResponse(Call<MusicList> call, Response<MusicList> response) {
-        //tv.setText(response.body().getResults().get(0).getTrackName());
+        SongAdapter songAdapter = new SongAdapter(
+                response.body(), this.getActivity().getBaseContext());
+        recyclerView.setAdapter(songAdapter);
     }
 
     /**
