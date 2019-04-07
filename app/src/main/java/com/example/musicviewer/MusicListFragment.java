@@ -127,9 +127,6 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
             for (SongItem song : response.body().getResults()) {
                 songViewModel.insert(song);
             }
-            Toast.makeText(getActivity().getBaseContext(),
-                    "Saved local copy successfully?",
-                    Toast.LENGTH_LONG).show();
         }
     }
 
