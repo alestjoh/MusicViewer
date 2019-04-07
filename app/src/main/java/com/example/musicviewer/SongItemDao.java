@@ -1,5 +1,6 @@
 package com.example.musicviewer;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -12,7 +13,7 @@ public interface SongItemDao {
     void insert(SongItem songItem);
 
     @Query("SELECT * from song_table")
-    List<SongItem> getAllSongs();
+    LiveData<List<SongItem>> getAllSongs();
 
     @Query("DELETE FROM song_table")
     void deleteAll();
