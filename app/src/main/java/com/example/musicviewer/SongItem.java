@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class SongItem {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "uid")
     public int uid;
 
     @ColumnInfo(name = "artist")

@@ -1,8 +1,10 @@
 package com.example.musicviewer;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -100,13 +104,12 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
      */
     @Override
     public void onResponse(Call<MusicList> call, Response<MusicList> response) {
-
         SongAdapter songAdapter = new SongAdapter(
                 response.body(), this.getActivity().getBaseContext());
         recyclerView.setAdapter(songAdapter);
         if (apiTarget.equals(getResources().getString(R.string.classic))) {
 
-            SongViewModel songViewModel = MainActivity.songViewModel;
+            SongViewModel songViewModel = ((MainActivity)getActivity()).getSongViewModel();
             songViewModel.deleteAll();
             for (SongItem song : response.body().getResults()) {
                 songViewModel.insert(song);
@@ -132,13 +135,19 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
                     "Error accessing music database. Loading local storage...",
                     Toast.LENGTH_LONG).show();
 
-            /*SongViewModel songViewModel = MainActivity.songViewModel;
-            MusicList musicList = new MusicList();
-            musicList.setResults(songViewModel.getAllSongs().getValue());
-            musicList.setResultCount(musicList.getResults().size());
-            SongAdapter songAdapter = new SongAdapter(
-                    musicList, this.getActivity().getBaseContext());
-            recyclerView.setAdapter(songAdapter);*/
+            SongViewModel songViewModel = ((MainActivity)getActivity()).getSongViewModel();
+            songViewModel.getAllSongs().observe((MainActivity) getActivity(),
+                    new Observer<List<SongItem>>() {
+                        @Override
+                        public void onChanged(@Nullable List<SongItem> songItems) {
+                            MusicList musicList = new MusicList();
+                            musicList.setResults(songItems);
+                            musicList.setResultCount(musicList.getResults().size());
+                            SongAdapter songAdapter = new SongAdapter(
+                                    musicList, MusicListFragment.this.getActivity());
+                            recyclerView.setAdapter(songAdapter);
+                        }
+                    });
         } else {
             Toast.makeText(
                     this.getActivity().getBaseContext(),

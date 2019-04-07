@@ -2,12 +2,18 @@ package com.example.musicviewer;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentFragment = null;
     private static final String CURRENT_FRAGMENT = "com.example.musicviewer.current_fragment";
 
-    public static SongViewModel songViewModel;
+    private static SongViewModel songViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }
         });
+    }
 
-        songViewModel = ViewModelProviders.of(this).get(SongViewModel.class);
+    public SongViewModel getSongViewModel() {
+        if (songViewModel == null) {
+            songViewModel = ViewModelProviders.of(this).get(SongViewModel.class);
+            /*songViewModel.getAllSongs().observe(this, new Observer<List<SongItem>>() {
+                @Override
+                public void onChanged(@Nullable List<SongItem> songItems) {
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Song Items Observed: " + songItems,
+                            Toast.LENGTH_LONG).show();
+                }
+            });*/
+        }
+        return songViewModel;
     }
 
     private void updateFragment(String str) {

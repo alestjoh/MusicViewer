@@ -12,7 +12,7 @@ public class SongRepository {
     private LiveData<List<SongItem>> allSongs;
 
     SongRepository(Application application) {
-        SongRoomDatabase db = SongRoomDatabase.getInstance(application);
+        SongRoomDatabase db = SongRoomDatabase.getDatabase(application);
         songItemDao = db.songItemDao();
         allSongs = songItemDao.getAllSongs();
     }

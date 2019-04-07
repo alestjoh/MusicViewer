@@ -12,7 +12,7 @@ public interface SongItemDao {
     @Insert
     void insert(SongItem songItem);
 
-    @Query("SELECT * from song_table")
+    @Query("SELECT * FROM song_table ORDER BY uid ASC")
     LiveData<List<SongItem>> getAllSongs();
 
     @Query("DELETE FROM song_table")
