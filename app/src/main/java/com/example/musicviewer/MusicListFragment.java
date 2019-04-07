@@ -100,12 +100,21 @@ public class MusicListFragment extends Fragment implements Callback<MusicList> {
      */
     @Override
     public void onResponse(Call<MusicList> call, Response<MusicList> response) {
-        Toast.makeText(getActivity().getBaseContext(),
-                "On Success was called: " + response.body(),
-                Toast.LENGTH_LONG).show();
-        /*SongAdapter songAdapter = new SongAdapter(
+
+        SongAdapter songAdapter = new SongAdapter(
                 response.body(), this.getActivity().getBaseContext());
-        recyclerView.setAdapter(songAdapter);*/
+        recyclerView.setAdapter(songAdapter);
+        if (apiTarget.equals(getResources().getString(R.string.classic))) {
+
+            SongViewModel songViewModel = MainActivity.songViewModel;
+            songViewModel.deleteAll();
+            for (SongItem song : response.body().getResults()) {
+                songViewModel.insert(song);
+            }
+            Toast.makeText(getActivity().getBaseContext(),
+                    "Saved local copy successfully?",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
